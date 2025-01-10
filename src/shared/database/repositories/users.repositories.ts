@@ -1,0 +1,20 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { type Prisma } from '@prisma/client';
+
+@Injectable()
+export class UserRepository {
+  constructor(private readonly prismaService: PrismaService) {}
+
+  create(createUserDto: Prisma.UserCreateArgs) {
+    return this.prismaService.user.create(createUserDto);
+  }
+
+  findUnique(findUniqueDto: Prisma.UserFindUniqueArgs) {
+    return this.prismaService.user.findUnique(findUniqueDto);
+  }
+
+  bulkCreateCategories(categoriesDto: Prisma.CategoryCreateManyArgs) {
+    return this.prismaService.category.createMany(categoriesDto);
+  }
+}
