@@ -4,7 +4,7 @@ import { SigninDto } from './dto/signinDto.dto';
 import { SignupDto } from './dto/signupDto.dto';
 import { isRoutePublic } from 'src/shared/decorators/IsRoutePublic';
 
-@isRoutePublic
+@isRoutePublic()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
