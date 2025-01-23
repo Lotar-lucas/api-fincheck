@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "create:docker": "docker run --name pg-fincheck -e POSTGRES_USER=$DB_USER -e POSTGRES_PASSWORD=$DB_PASS -e POSTGRES_DB=$DB_NAME -p 5432:5432 -v pg-data-fincheck:/var/lib/postgresql/data -d postgres",
+    "create:docker": "docker run --name pg-fincheck -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -e POSTGRES_DB=fincheck -p 5432:5432 -v pg-data-fincheck:/var/lib/postgresql/data -d postgres",
     "migrate": "npx prisma migrate dev "
   },
   "dependencies": {
