@@ -1,19 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateBankAccountDto } from '../dto/create-bank-account.dto';
-import { UpdateBankAccountDto } from '../dto/update-bank-account.dto';
-import { bankAccountsRepository } from 'src/shared/database/repositories/bank-accounts.repositories';
+import { BankAccountsRepository } from 'src/shared/database/repositories/bank-accounts.repositories';
 
 @Injectable()
 export class ValidateBankAccountOwnershipService {
-  constructor(private readonly banckAccountsRepo: bankAccountsRepository) {}
+  constructor(private readonly bankAccountsRepo: BankAccountsRepository) {}
 
   isValidOwner = async (
     userId: string,
-    banckAccountId: string,
+    bankAccountId: string,
   ): Promise<boolean | void> => {
-    const isOwner = await this.banckAccountsRepo.findFirst({
+    const isOwner = await this.bankAccountsRepo.findFirst({
       where: {
-        id: banckAccountId,
+        id: bankAccountId,
         userId,
       },
     });

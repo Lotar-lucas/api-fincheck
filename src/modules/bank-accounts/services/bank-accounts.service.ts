@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBankAccountDto } from '../dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from '../dto/update-bank-account.dto';
-import { bankAccountsRepository } from 'src/shared/database/repositories/bank-accounts.repositories';
+import { BankAccountsRepository } from 'src/shared/database/repositories/bank-accounts.repositories';
 import { ValidateBankAccountOwnershipService } from './validate-bank-account-ownership.service';
+import { BankAccountType } from '@prisma/client';
 
 @Injectable()
 export class BankAccountsService {
   constructor(
-    private readonly banckAccountsRepo: bankAccountsRepository,
+    private readonly banckAccountsRepo: BankAccountsRepository,
     private readonly validateBankAccountOwnershipService: ValidateBankAccountOwnershipService,
   ) {}
 
@@ -25,9 +26,44 @@ export class BankAccountsService {
     });
   }
 
-  findAllByUserId(userId: string) {
-    return this.banckAccountsRepo.findMany({
+  async findAllByUserId(userId: string) {
+    const bankAccounts = (await this.banckAccountsRepo.findMany({
       where: { userId },
+      include: {
+        transactions: {
+          select: {
+            type: true,
+            value: true,
+          },
+        },
+      },
+    })) as Array<{
+      name: string;
+      initialBalance: number;
+      type: BankAccountType;
+      color: string;
+      id: string;
+      userId: string;
+      transactions: Array<{ type: string; value: number }>;
+    }>;
+
+    return bankAccounts.map(({ transactions, ...bankAccount }) => {
+      const totalTransactions = transactions.reduce((acc, transaction) => {
+        return (
+          acc +
+          (transaction.type === 'income'
+            ? transaction.value
+            : -transaction.value)
+        );
+      }, 0);
+
+      const currentBalance = bankAccount.initialBalance + totalTransactions;
+
+      return {
+        ...bankAccount,
+        currentBalance,
+        transactions,
+      };
     });
   }
 
