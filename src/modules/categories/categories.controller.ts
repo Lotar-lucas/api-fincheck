@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
+import { CategoriesService } from './services/categories.service';
 // import { CreateCategoryDto } from './dto/create-category.dto';
 // import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ActiveUserId } from 'src/shared/decorators/ActiveUserId';
