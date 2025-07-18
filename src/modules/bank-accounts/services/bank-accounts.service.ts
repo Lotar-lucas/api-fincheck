@@ -51,7 +51,7 @@ export class BankAccountsService {
       const totalTransactions = transactions.reduce((acc, transaction) => {
         return (
           acc +
-          (transaction.type === 'income'
+          (transaction.type === 'INCOME'
             ? transaction.value
             : -transaction.value)
         );
